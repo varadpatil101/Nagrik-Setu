@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Report an issue | Nagrik Setu</title><link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="report-page">
+<nav><a class="brand" href="/citizen/home"><span>NS</span>Nagrik Setu</a><div class="account-menu"><button class="account-trigger">Account ▾</button><div class="account-panel"><a href="/profile">Profile settings</a><form action="/auth/logout" method="post"><button>Log out</button></form></div></div></nav>
+<main class="form-wrap">
+  <section class="form-copy"><p class="eyebrow">Citizen report</p><h1>A small report can make a <i>real</i> difference.</h1><p>Your report details and uploaded photo are assessed together by AI to assign its 1–5 priority level.</p><div class="privacy"><b>◌ Your report is public.</b><br>Personal contact details are never shown on the public dashboard.</div></section>
+  <section class="report-card">
+    <div id="success" class="success hidden"><b>Report received.</b><p>Thank you for helping improve your city. The selected department can now begin its response.</p><p id="assigned-priority"></p><a href="/citizen/dashboard">See my reports →</a></div>
+    <form id="issue-form" enctype="multipart/form-data">
+      <div class="form-header"><span>1 of 1</span><h2>Tell us what happened</h2></div>
+      <label>Issue title<input name="title" required maxlength="100" placeholder="e.g., Large pothole near bus stop"></label>
+      <label>Category<select name="category" required><option value="">Select issue type</option><option>Road &amp; pothole</option><option>Streetlight</option><option>Waste &amp; garbage</option><option>Water &amp; drainage</option><option>Public safety</option><option>Other</option></select></label>
+      <section class="department-routing" aria-labelledby="department-routing-heading">
+        <div class="routing-heading"><span id="department-routing-heading">Responsible department</span><small>AI suggests a department from the issue title. You can always override it.</small></div>
+        <input type="hidden" name="department" id="selected-department" required>
+        <div class="routing-actions"><button type="button" class="routing-button active" id="auto-department-btn">✦ Select automatically</button><button type="button" class="routing-button" id="manual-department-btn">Choose manually</button></div>
+        <div id="auto-department-result" class="auto-department-result" aria-live="polite">Enter an issue title and Nagrik Setu AI will select the most suitable department.</div>
+        <label id="manual-department-wrap" class="manual-department hidden">Choose department manually<select id="manual-department"><option value="">Choose the department to handle this issue</option><option th:each="department : ${departments}" th:value="${department.label}" th:text="${department.label}"></option></select></label>
+      </section>
+      <label>What needs attention?<textarea name="description" required maxlength="1500" placeholder="Briefly describe what you saw and why it needs attention."></textarea></label>
+      <div class="two-col"><label>Location<input name="location" placeholder="Area, ward or landmark"></label><button type="button" class="location-button" id="location-btn">⌖ Use my location</button></div>
+      <input type="hidden" name="latitude"><input type="hidden" name="longitude">
+      <label>Upload photo <small>Optional — JPG, PNG, WEBP, or GIF; maximum 10 MB. Nagrik Setu AI verifies that the photo matches your issue title before it can be submitted.</small><input id="issue-image" name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label><p id="image-verification" class="image-verification" aria-live="polite"></p>
+      <button class="button submit" type="submit">Submit report <b>→</b></button><p id="form-error" class="error"></p>
+    </form>
+  </section>
+</main>
+<script src="/js/app.js"></script><script src="/js/menu.js"></script>
+</body></html>

@@ -1,0 +1,11 @@
+target/
+.mvn/
+*.log
+.env
+uploads/
+.run*.log
+.ppt-build/
+.docx-qa/
+.codex-finalizer/
+deliverables/
+build_nagrik_report.py

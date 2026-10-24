@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Staff dashboard | Nagrik Setu</title><link rel="stylesheet" href="/css/style.css?v=staff-evidence-2"></head>
+<body>
+<nav><a class="brand" href="/staff/dashboard"><span>NS</span>Nagrik Setu</a><div class="staff-nav"><span th:text="${user.department}">Department</span><div class="account-menu"><button class="account-trigger" th:text="${user.fullName} + ' ▾'">Account ▾</button><div class="account-panel"><a href="/profile">Profile settings</a><form action="/auth/logout" method="post"><button>Log out</button></form></div></div></div></nav>
+<main class="dashboard">
+  <div class="dash-head"><div><p class="eyebrow" th:text="${user.department} + ' operations'">Department operations</p><h1>Good morning, team.</h1><p>Only reports assigned to your department appear here.</p></div><div class="date">LIVE QUEUE<br><b th:text="${#lists.size(issues)} + ' reports'">0 reports</b></div></div>
+  <section class="stats"><article><span>Department reports</span><b th:text="${#lists.size(issues)}">0</b><small>in your queue</small></article><article><span>New intake</span><b th:text="${newCount}">0</b><small>awaiting review</small></article><article><span>High priority</span><b th:text="${highCount}">0</b><small>requires action</small></article></section>
+  <section class="queue"><div class="queue-header"><h2>Incoming reports</h2><select id="status-filter"><option value="">All statuses</option><option>Reported</option><option>In progress</option><option>Resolved</option></select></div>
+    <div class="table-wrap"><table><thead><tr><th>REPORT</th><th>CATEGORY / LOCATION</th><th>PRIORITY</th><th>STATUS &amp; EVIDENCE</th><th></th></tr></thead><tbody>
+      <tr th:each="issue : ${issues}" th:attr="data-status=${issue.status}">
+        <td><b th:text="${issue.title}">Issue</b><small th:text="${#temporals.format(issue.createdAt, 'dd MMM, HH:mm')}">Now</small></td>
+        <td><span th:text="${issue.category}">Road</span><small th:text="${issue.location ?: 'No landmark provided'}">Location</small><a class="issue-image" th:if="${issue.imageUrl}" th:href="${issue.imageUrl}" target="_blank">View citizen photo</a></td>
+        <td><em th:class="'priority ' + ${#strings.toLowerCase(issue.priority)}" th:text="${issue.priority}">3</em></td>
+        <td><b class="issue-status" th:text="${issue.status}">Reported</b><a class="issue-image" th:if="${issue.resolutionEvidenceUrl}" th:href="${issue.resolutionEvidenceUrl}" target="_blank">View resolution image</a><small th:unless="${issue.resolutionEvidenceUrl}">No resolution image submitted.</small></td>
+        <td><button class="edit-evidence" th:attr="data-id=${issue.id},data-title=${issue.title},data-has-evidence=${issue.resolutionEvidenceUrl != null}">Edit</button></td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(issues)}"><td colspan="5" class="empty">Your department queue is clear.</td></tr>
+    </tbody></table></div>
+  </section>
+</main>
+<div id="evidence-modal" class="evidence-modal hidden" role="dialog" aria-modal="true" aria-labelledby="evidence-modal-title"><div class="evidence-dialog"><button id="close-evidence-modal" class="modal-close" type="button" aria-label="Close">×</button><p class="eyebrow">Resolution evidence</p><h2 id="evidence-modal-title">Update report</h2><p class="modal-copy">Upload a clear image showing that the issue has been resolved. Submitting evidence marks this report as resolved.</p><input id="evidence-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><p id="evidence-file-name" class="file-name">No image selected.</p><p id="evidence-error" class="error"></p><div class="modal-actions"><button id="clear-evidence" class="clear-evidence" type="button">Clear image</button><button id="submit-evidence" class="button" type="button" disabled>Submit image <b>→</b></button></div></div></div>
+<script src="/js/dashboard.js?v=staff-evidence-2"></script><script src="/js/menu.js"></script>
+</body></html>

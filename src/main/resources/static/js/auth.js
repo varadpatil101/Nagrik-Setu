@@ -1,0 +1,2 @@
+const staffRole=document.querySelector('input[value="STAFF"]'),citizenRole=document.querySelector('input[value="CITIZEN"]'),department=document.querySelector('#department-field');
+function toggleDepartment(){if(!department)return;const staff=staffRole.checked;department.classList.toggle('hidden',!staff);department.querySelector('select').required=staff}staffRole?.addEventListener('change',toggleDepartment);citizenRole?.addEventListener('change',toggleDepartment);toggleDepartment();
